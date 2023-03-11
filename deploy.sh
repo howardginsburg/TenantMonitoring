@@ -64,7 +64,7 @@ az functionapp create --consumption-plan-location $location --name $functionAppN
 az functionapp config set --name $functionAppName --resource-group $resourceGroupName --linux-fx-version "DOTNET-ISOLATED|7.0"
 az functionapp config appsettings set --name $functionAppName --resource-group $resourceGroupName --settings "CosmosConnection=$cosmosConnectionString" "CosmosDatabase=$cosmosDatabaseName" "CosmosContainer=$cosmosCollection"
 
-wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/main/tenantmonitoringfunctions.zip
+wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/master/tenantmonitoringfunctions.zip
 az functionapp deployment source config-zip --resource-group $resourceGroupName -n $functionAppName --src tenantmonitoringfunctions.zip
 rm tenantmonitoringfunctions.zip
 
@@ -89,7 +89,7 @@ sqlcmd -S $synapseWorkspace-ondemand.sql.azuresynapse.net -d master -U $synapseS
 # Create a database to hold the views.
 sqlcmd -S $synapseWorkspace-ondemand.sql.azuresynapse.net -d master -U $synapseSQLAdmin -P $synapseSQLPassword -Q "CREATE DATABASE [tenantmonitoringdb]"
 # Run the script to create the views.
-wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/main/createviews.sql
+wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/master/createviews.sql
 sqlcmd -S $synapseWorkspace-ondemand.sql.azuresynapse.net -d tenantmonitoringdb -U $synapseSQLAdmin -P $synapseSQLPassword -v cosmosAccountName="$cosmosAccountName" -i createviews.sql
 rm createviews.sql
 
