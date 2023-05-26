@@ -1,5 +1,5 @@
 {
-    "id": "microsoft.storage.storageaccounts.write",
+    "id": "microsoft.sql.servers.write",
     "jobs": [
         {
             "name": "job1 name",
