@@ -50,32 +50,31 @@ namespace Demo.TenantMonitor
 
             //Get the configuration data for this event type.  To access App Config json, you use an index pattern.
 
-            //Build the configuration key name.
-            string keyName = "microsoft.storage.storageaccounts.write";
-
-            //The root of the key data is always at index 0.
-            string keyRoot = keyName + ":0";
+            //Build the configuration key name we take the action and replace the / with . and make it all lower case.
+            string keyName = eventData.data.authorization.action;
+            keyName = keyName.ToLower();
+            keyName = keyName.Replace("/", ".");
 
             //See if there is configration data by looking for the id in the json.
-            string id = _configuration[keyRoot + ":id"];
+            string id = _configuration[keyName + ":id"];
             if (id != null)
             {
                 EventJobConfiguration jobConfig = new EventJobConfiguration();
                 jobConfig.id = id;
                 //Get the job configurations.
                 int index = 0;
-                string jobName = _configuration[keyRoot + ":jobs:" + index + ":name"];
+                string jobName = _configuration[keyName + ":jobs:" + index + ":name"];
                 while (jobName != null)
                 {
                     Job job = new Job();
                     job.Name = jobName;
-                    job.Description = _configuration[keyRoot + ":jobs:" + index + ":description"];
-                    job.Api = _configuration[keyRoot + ":jobs:" + index + ":api"];
-                    job.Status = _configuration[keyRoot + ":jobs:" + index + ":status"];
+                    job.Description = _configuration[keyName + ":jobs:" + index + ":description"];
+                    job.Api = _configuration[keyName + ":jobs:" + index + ":api"];
+                    job.Status = _configuration[keyName + ":jobs:" + index + ":status"];
                     jobConfig.jobs.Add(job);
                     
                     index++;
-                    jobName = _configuration[keyRoot + ":" + "jobs:" + index + ":name"];
+                    jobName = _configuration[keyName + ":" + "jobs:" + index + ":name"];
                 }
                 item.jobConfig = jobConfig;
 

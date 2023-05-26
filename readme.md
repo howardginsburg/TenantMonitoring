@@ -7,7 +7,7 @@ The purpose of this repo is to serve as a reference implementation of how to do 
 ![Architecture](images/Tenant%20Monitoring%20Architecture.png)
 
 1. Each Azure Subscription will get an Event Grid Subscription.
-2. The Subscription Listener will query Azure App Config to see if there is a jobs configuration that needs to be run.  If one exists, a document is created in cosmos db that contains the event data, the job configuration, and log data.
+2. The Subscription Listener will query Azure App Config to see if there is a jobs configuration that needs to be run.  If one exists, a document is created in cosmos db that contains the event data, the job configuration, and log data.  The key is built by taking the value of data.authorization.action from the event grid message, converting it to lowercase, and replacing / with .  Ex: Microsoft.Sql/servers/write becomes microsoft.sql.servers.write.
 3. Cosmos ChangeFeed will be used to process events and add tracking info back to the document.  Durable Functions can will be used for complex tasks.
 4. Once a task is complete, the TTL on the document will be set so that it gets deleted in order to keep the active tasks in the container small.
 5. SynapseLink will be used to capture historical data into Cosmos Analytic Store(s).
