@@ -7,7 +7,7 @@ The purpose of this repo is to serve as a reference implementation of how to do 
 ![Architecture](images/Tenant%20Monitoring%20Architecture.png)
 
 1. Each Azure Subscription will get an Event Grid Subscription.
-2. The Subscription Listener provides any filtering and payload enrichment and then creates a new document in Cosmos DB.
+2. The Subscription Listener will query Azure App Config to see if there is a jobs configuration that needs to be run.  If one exists, a document is created in cosmos db that contains the event data, the job configuration, and log data.
 3. Cosmos ChangeFeed will be used to process events and add tracking info back to the document.  Durable Functions can will be used for complex tasks.
 4. Once a task is complete, the TTL on the document will be set so that it gets deleted in order to keep the active tasks in the container small.
 5. SynapseLink will be used to capture historical data into Cosmos Analytic Store(s).
@@ -24,6 +24,8 @@ The deployment script will create the following assets in Azure:
   - Leases collection with 400 ru's
 - Storage Accounts
   - Two storage accounts are created.  One is used by the Azure Fuction.  The other has the hierarchical file system enabled and is required to create an Azure Synapse resource.  It is not used in this implementation.
+- Azure App Config
+  - Stores job configuration data that the SubscriptionListener reads in.
 - Azure Function (C# .Net 7)
   - SubscriptionListener - triggered by EventGrid
   - EventHandler - triggered by Cosmos DB changefeed
@@ -42,6 +44,10 @@ The deployment script will create the following assets in Azure:
 
 1. Select the Event Grid System Topic resource.  The example does not have any filters on the subscription to Event Grid.  You will already see in the metrics that messages are being received.
 2. Select the Event Subscription. See that it is configured to route messages to the SubscriptionListener function.
+
+### Azure App Config
+
+1. Select the Azure App Config resource.  Explore the configuration that is stored there.
 
 ### Azure Functions
 
@@ -77,7 +83,21 @@ on EventData.id = EventLogs.id
 where dbo.EventData.id='<Insert an Event Id from previous query>'
 ```
 
-## 3. Next Steps
+## 3. Testing
+
+To test an EventGrid triggered function, you must use the following configuration in your testing tool:
+
+Type: Http Post
+
+Url: `http://localhost:<FunctionPort>/runtime/webhooks/EventGrid?functionName=SubscriptionListener`
+
+Header: aeg-event-type: Notification
+
+Body Configuration: `raw json`
+
+Payload: See [sampleevent.json](/sampleevent.json)
+
+## 4. Next Steps
 
 If you decide to use this in a production scenario, consider making the following changes.  This list is not exhaustive, and you should make whatever changes are relevant to your environment.
 

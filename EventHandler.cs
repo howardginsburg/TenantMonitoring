@@ -42,10 +42,10 @@ namespace Demo.TenantMonitor
                 EventItem item = JsonConvert.DeserializeObject<EventItem>(json);
                 _logger.LogInformation($"EventItem Id: {item.id}" );
 
-                //If the status is done, set the ttl so that it will be removed from the collection.  We don't want to delete
+                //If the completed date is set, set the ttl so that it will be removed from the collection.  We don't want to delete
                 //it, otherwise, SynapseLink won't get the final version.
                  
-                if (item.status.Equals(Status.Done))
+                if (item.completedDate != DateTime.MinValue)
                 {
                     //Note, after we set the ttl and save it, the document will get picked up by changefeed again.  Thus the check
                     //it's not already set.
@@ -66,10 +66,16 @@ namespace Demo.TenantMonitor
                 //Perform remediations and update the status.
                 else
                 {
-                    //TODO: Do remediation...
+                    foreach (Job job in item.jobConfig.jobs)
+                    {
+                        if (job.Status == "Active")
+                        {
+                            //TODO: Add code to perform remediations here.
+                            job.RunDate = DateTime.Now;
+                        }
+                    }
 
-                    item.logs.Add(new LogItem(DateTime.Now,"Magic has happened!")); //add a log entry.
-                    item.status = Status.Done; //set the status to done.
+                    item.completedDate = DateTime.Now;   
                     
                     //Save it back to cosmos.
                     EventItem createdItem = await _cosmosContainer.UpsertItemAsync<EventItem>(

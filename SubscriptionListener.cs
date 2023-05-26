@@ -2,6 +2,7 @@
 // http://localhost:7071/runtime/webhooks/EventGrid?functionName={functionname}
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
 using System.Dynamic;
@@ -11,12 +12,15 @@ namespace Demo.TenantMonitor
     public class SubscriptionListener
     {
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
+        
         private readonly Container _cosmosContainer;
         
-        public SubscriptionListener(ILoggerFactory loggerFactory)
+        public SubscriptionListener(ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             //Get the logger.
             _logger = loggerFactory.CreateLogger<SubscriptionListener>();
+            _configuration = configuration;
 
             //Get a handle to the cosmos container we want to write records into.
             CosmosClient cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosConnection"));
@@ -42,14 +46,45 @@ namespace Demo.TenantMonitor
             EventItem item = new EventItem();
             item.id = (string)eventData.id; //use the eventgrid id as the cosmos document id.
             item.eventgriddata = eventData; //store the raw eventgrid data.
-            item.logs.Add(new LogItem(DateTime.Now,"Initial creation")); //add a log entry.
-            item.status = Status.New; //set the status to new.
+            item.createdDate = DateTime.Now; //set the created date.
 
-            //Save our new EventItem to cosmos.
-            EventItem createdItem = await _cosmosContainer.UpsertItemAsync<EventItem>(
-                item: item,
-                partitionKey: new PartitionKey(item.id)
-            );
+            //Get the configuration data for this event type.  To access App Config json, you use an index pattern.
+
+            //Build the configuration key name.
+            string keyName = "microsoft.storage.storageaccounts.write";
+
+            //The root of the key data is always at index 0.
+            string keyRoot = keyName + ":0";
+
+            //See if there is configration data by looking for the id in the json.
+            string id = _configuration[keyRoot + ":id"];
+            if (id != null)
+            {
+                EventJobConfiguration jobConfig = new EventJobConfiguration();
+                jobConfig.id = id;
+                //Get the job configurations.
+                int index = 0;
+                string jobName = _configuration[keyRoot + ":jobs:" + index + ":name"];
+                while (jobName != null)
+                {
+                    Job job = new Job();
+                    job.Name = jobName;
+                    job.Description = _configuration[keyRoot + ":jobs:" + index + ":description"];
+                    job.Api = _configuration[keyRoot + ":jobs:" + index + ":api"];
+                    job.Status = _configuration[keyRoot + ":jobs:" + index + ":status"];
+                    jobConfig.jobs.Add(job);
+                    
+                    index++;
+                    jobName = _configuration[keyRoot + ":" + "jobs:" + index + ":name"];
+                }
+                item.jobConfig = jobConfig;
+
+                //Save our new EventItem to cosmos.
+                EventItem createdItem = await _cosmosContainer.UpsertItemAsync<EventItem>(
+                    item: item,
+                    partitionKey: new PartitionKey(item.id)
+                );
+            }
         }
     }
 }

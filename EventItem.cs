@@ -7,22 +7,26 @@ namespace Demo.TenantMonitor
    {
         public string id { get; set; }
         public dynamic eventgriddata { get; set; }
-        public List<LogItem> logs = new List<LogItem>();
-        public string status { get; set;}
+        public EventJobConfiguration jobConfig { get; set; }
         public int ttl = -1;
+        public DateTime createdDate { get; set; }
+        public DateTime completedDate { get; set; }
 
    }
 
-    public record LogItem
-    (
-        DateTime Date,
-        string log
-    );
 
-    public static class Status
+    public record EventJobConfiguration
     {
-        public static string New = "New";
-        public static string InProgress = "InProgress";
-        public static string Done = "Done";
+        public string id { get; set; }
+        public List<Job> jobs = new List<Job>();
+    }
+
+    public record Job
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Api { get; set; }
+        public string Status { get; set; }
+        public DateTime RunDate { get; set; }
     }
 }

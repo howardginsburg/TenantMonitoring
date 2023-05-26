@@ -1,0 +1,17 @@
+{
+    "id": "microsoft.storage.storageaccounts.write",
+    "jobs": [
+        {
+            "name": "job1 name",
+            "description": "job1 description",
+            "api": "https://apiurl",
+            "status": "Active"
+        },
+        {
+            "name": "job2 name",
+            "description": "job2 description",
+            "api": "https://apiurl",
+            "status": "Active"
+        }
+    ]
+}

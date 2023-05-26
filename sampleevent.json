@@ -1,0 +1,51 @@
+[
+    {
+        "subject": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+        "eventType": "Microsoft.Resources.ResourceActionSuccess",
+        "id": "1630988f-b9d1-4a82-a6eb-f5e6184834af",
+        "data": {
+            "authorization": {
+                "scope": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+                "action": "Microsoft.Sql/servers/write",
+                "evidence": {
+                    "role": "Arcadia RP First Party Service Role",
+                    "roleAssignmentScope": "/subscriptions/subscriptionid",
+                    "roleAssignmentId": "e3e9ff2bb12847e8b443859720feed17",
+                    "roleDefinitionId": "a53b114a452b4d20bcd6c51c3c8c5878",
+                    "principalId": "e39ecabc4d594cb99f8ba549878ff483",
+                    "principalType": "ServicePrincipal"
+                }
+            },
+            "claims": {
+                "aud": "https://management.azure.com/",
+                "iss": "https://sts.windows.net/yourtenantid/",
+                "iat": "1684934381",
+                "nbf": "1684934381",
+                "exp": "1685021081",
+                "aio": "E2ZgYNj/YsKkEIPJoXv3KfBt6PSJBQA=",
+                "appid": "9e09aefc-b2e5-4d19-9f74-3e3e8b11a57b",
+                "appidacr": "2",
+                "http://schemas.microsoft.com/identity/claims/identityprovider": "https://sts.windows.net/yourtenantid/",
+                "idtyp": "app",
+                "http://schemas.microsoft.com/identity/claims/objectidentifier": "e39ecabc-4d59-4cb9-9f8b-a549878ff483",
+                "rh": "0.AVkAbFSgdBE1zUKLcWJqaGm8mkZIf3kAutdPukPawfj2MBOdAAA.",
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": "e39ecabc-4d59-4cb9-9f8b-a549878ff483",
+                "http://schemas.microsoft.com/identity/claims/tenantid": "yourtenantid",
+                "uti": "wsCPP8hyG062zFnq2RR0AA",
+                "ver": "1.0",
+                "xms_tcdt": "1665035573"
+            },
+            "correlationId": "969baf4c-4d5d-4ad9-bd78-6db601d68a69",
+            "resourceProvider": "Microsoft.Sql",
+            "resourceUri": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+            "operationName": "Microsoft.Authorization/policies/auditIfNotExists/action",
+            "status": "Succeeded",
+            "subscriptionId": "subscriptionid",
+            "tenantId": "yourtenantid"
+        },
+        "dataVersion": "2",
+        "metadataVersion": "1",
+        "eventTime": "2023-05-24T13:34:42.1881694Z",
+        "topic": "/subscriptions/subscriptionid"
+    }
+]
