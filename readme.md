@@ -74,12 +74,12 @@ use tenantmonitoringdb;
 select top 10 * from dbo.EventData;
 
 --Select top 10 from EventLogs
-select top 10 * from dbo.EventLogs;
+select top 10 * from dbo.JobLogs;
 
 --Join the eventdata with the eventlogs
 select * from dbo.EventData
-inner join dbo.EventLogs
-on EventData.id = EventLogs.id
+inner join dbo.JobLogs
+on EventData.id = JobLogs.id
 where dbo.EventData.id='<Insert an Event Id from previous query>'
 ```
 
