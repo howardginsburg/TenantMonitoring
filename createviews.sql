@@ -1,6 +1,4 @@
 CREATE OR ALTER VIEW EventData
-AS SELECT [id], [subject], [resourceuri], [status]
-CREATE OR ALTER VIEW EventData
 AS SELECT [id], [subject], [resourceuri], [action], Convert(datetime2, createdDate, 126) as [createddate], Convert(datetime2, completedDate, 126) as [completeddate]
 FROM OPENROWSET(​PROVIDER = 'CosmosDB',
                 CONNECTION = 'Account=$(cosmosAccountName);Database=TenantMonitoring',
