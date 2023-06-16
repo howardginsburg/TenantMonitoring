@@ -17,6 +17,7 @@ cosmosCollection="EventLog"
 synapseWorkspace="tenantmonitorsynapse$rand"
 synapseStorageAccountName="tenantmonitorsynapse$rand"
 synapseContainerName="lake"
+appconfigName="tenantmonitorappconfig$rand"
 
 ##Synapse User Name and Password.
 synapseSQLAdmin="sqladminuser"
@@ -59,10 +60,15 @@ az cosmosdb sql container create --name $cosmosCollection --database-name $cosmo
 cosmosAccountKey=$(az cosmosdb keys list --name $cosmosAccountName --resource-group $resourceGroupName --type keys --query "primaryMasterKey" -o tsv)
 cosmosConnectionString=$(az cosmosdb keys list --name $cosmosAccountName --resource-group $resourceGroupName --type connection-strings --query "connectionStrings[0].connectionString" -o tsv)
 
+az appconfig create -g $resourceGroupName -l $location -n $appconfigName --sku Standard
+az appconfig kv set -n $appconfigName --key microsoft.sql.servers.write --content-type application/json --value "{\"id\":\"microsoft.sql.servers.write\",\"jobs\":[{\"name\":\"job1 name\",\"description\":\"job1 description\",\"api\":\"https://apiurl\",\"status\":\"Active\"},{\"name\":\"job2 name\",\"description\":\"job2 description\",\"api\":\"https://apiurl\",\"status\":\"Active\"}]}" --yes
+appconfigConnectionString=$(az appconfig credential list -g $resourceGroupName -n $appconfigName --query "[0].connectionString" -o tsv)
+
+
 # Create the function app, set the linux function version to 7.0 since our functions are written for .Net 7, and set the config values.
 az functionapp create --consumption-plan-location $location --name $functionAppName --os-type Linux --resource-group $resourceGroupName --runtime dotnet-isolated --runtime-version 7 --storage-account $functionStorageAccountName --app-insights $functionAppInsights --functions-version 4
 az functionapp config set --name $functionAppName --resource-group $resourceGroupName --linux-fx-version "DOTNET-ISOLATED|7.0"
-az functionapp config appsettings set --name $functionAppName --resource-group $resourceGroupName --settings "CosmosConnection=$cosmosConnectionString" "CosmosDatabase=$cosmosDatabaseName" "CosmosContainer=$cosmosCollection"
+az functionapp config appsettings set --name $functionAppName --resource-group $resourceGroupName --settings "CosmosConnection=$cosmosConnectionString" "CosmosDatabase=$cosmosDatabaseName" "CosmosContainer=$cosmosCollection" "Configuration=$appconfigConnectionString"
 
 wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/master/tenantmonitoringfunctions.zip
 az functionapp deployment source config-zip --resource-group $resourceGroupName -n $functionAppName --src tenantmonitoringfunctions.zip
