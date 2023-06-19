@@ -1,0 +1,15 @@
+[
+    {
+        "id": "b2af88c7-1ae2-448b-b89f-69beda3dae30",
+        "topic": "/subscriptions/yoursubscriptionid",
+        "subject": "",
+        "data": {
+            "validationCode": "yoursystemgeneratedtoken",
+            "validationUrl": "https://rp-global.eventgrid.azure.net:553/eventsubscriptions/youreventgridsubscriptionname/validate?id=yoursystemgeneratedtoken"
+        },
+        "eventType": "Microsoft.EventGrid.SubscriptionValidationEvent",
+        "eventTime": "2023-06-19T20:50:07.6211959Z",
+        "metadataVersion": "1",
+        "dataVersion": "2"
+    }
+]

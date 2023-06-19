@@ -1,15 +1,15 @@
 [
     {
-        "subject": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+        "subject": "/subscriptions/yoursubscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
         "eventType": "Microsoft.Resources.ResourceActionSuccess",
         "id": "1630988f-b9d1-4a82-a6eb-f5e6184834af",
         "data": {
             "authorization": {
-                "scope": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+                "scope": "/subscriptions/yoursubscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
                 "action": "Microsoft.Sql/servers/write",
                 "evidence": {
                     "role": "Arcadia RP First Party Service Role",
-                    "roleAssignmentScope": "/subscriptions/subscriptionid",
+                    "roleAssignmentScope": "/subscriptions/yoursubscriptionid",
                     "roleAssignmentId": "e3e9ff2bb12847e8b443859720feed17",
                     "roleDefinitionId": "a53b114a452b4d20bcd6c51c3c8c5878",
                     "principalId": "e39ecabc4d594cb99f8ba549878ff483",
@@ -37,15 +37,15 @@
             },
             "correlationId": "969baf4c-4d5d-4ad9-bd78-6db601d68a69",
             "resourceProvider": "Microsoft.Sql",
-            "resourceUri": "/subscriptions/subscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
+            "resourceUri": "/subscriptions/yoursubscriptionid/resourceGroups/synapseworkspace-managedrg-067040c6-2140-4b18-b818-d1dfa332c700/providers/Microsoft.Sql/servers/tenantmonitorsynapse980",
             "operationName": "Microsoft.Authorization/policies/auditIfNotExists/action",
             "status": "Succeeded",
-            "subscriptionId": "subscriptionid",
+            "subscriptionid": "yoursubscriptionid",
             "tenantId": "yourtenantid"
         },
         "dataVersion": "2",
         "metadataVersion": "1",
         "eventTime": "2023-05-24T13:34:42.1881694Z",
-        "topic": "/subscriptions/subscriptionid"
+        "topic": "/subscriptions/yoursubscriptionid"
     }
 ]
