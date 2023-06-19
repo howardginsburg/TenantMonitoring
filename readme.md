@@ -85,17 +85,19 @@ where dbo.EventData.id='<Insert an Event Id from previous query>'
 
 ## 3. Testing
 
-To test an EventGrid triggered function, you must use the following configuration in your testing tool:
+To test the initial Event Grid subscription, you must use the following configuration in your testing tool:
 
-Type: Http Post
+- Type: Http Post
+- Url: `http://localhost:7071/api/SubscriptionListener`
+- Body Configuration: `raw json`
+- Body: See [samplesubscription.json](/samplesubscription.json)
 
-Url: `http://localhost:<FunctionPort>/runtime/webhooks/EventGrid?functionName=SubscriptionListener`
+To test an Event Grid Message, you must use the following configuration in your testing tool:
 
-Header: aeg-event-type: Notification
-
-Body Configuration: `raw json`
-
-Payload: See [sampleevent.json](/sampleevent.json)
+- Type: Http Post
+- Url: `http://localhost:7071/api/SubscriptionListener`
+- Body Configuration: `raw json`
+- Body: See [sampleevent.json](/sampleevent.json)
 
 ## 4. Next Steps
 
