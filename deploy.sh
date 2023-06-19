@@ -75,11 +75,17 @@ az functionapp deployment source config-zip --resource-group $resourceGroupName 
 rm tenantmonitoringfunctions.zip
 
 # Get the resource ID of the function.
-functionId=$(az functionapp show --name $functionAppName --resource-group $resourceGroupName -o tsv --query id)
+#functionId=$(az functionapp show --name $functionAppName --resource-group $resourceGroupName -o tsv --query id)
+
+# Get the function url and key.
+functionUrl=$(az functionapp function show --function-name SubscriptionListener --name $functionAppName --resource-group $resourceGroupName -o tsv --query invokeUrlTemplate)
+functionKey=$(az functionapp function keys list --function-name SubscriptionListener --name $functionAppName --resource-group $resourceGroupName -o tsv --query default)
+functionEndpoint="$functionUrl?code=$functionKey"
 
 # Create an event grid system topic to the subscription and then a event subscription to the topic to trigger the EventListener function.
 az eventgrid system-topic create --name $eventGridName --resource-group $resourceGroupName --source /subscriptions/$subscription --topic-type Microsoft.Resources.Subscriptions --location global
-az eventgrid system-topic event-subscription create --name $eventGridSystemTopic --resource-group $resourceGroupName --system-topic-name $eventGridName --endpoint-type azurefunction --event-delivery-schema eventgridschema --endpoint $functionId/functions/SubscriptionListener
+#az eventgrid system-topic event-subscription create --name $eventGridSystemTopic --resource-group $resourceGroupName --system-topic-name $eventGridName --endpoint-type azurefunction --event-delivery-schema eventgridschema --endpoint $functionId/functions/SubscriptionListener
+az eventgrid system-topic event-subscription create --name $eventGridSystemTopic --resource-group $resourceGroupName --system-topic-name $eventGridName --endpoint-type webhook --event-delivery-schema eventgridschema --endpoint $functionEndpoint
 
 # Create a storage account and container for synapse.  Enable the hierarchical file system.
 az storage account create -n $synapseStorageAccountName -g $resourceGroupName -l $location --sku "Standard_LRS" --enable-hierarchical-namespace true
