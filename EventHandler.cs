@@ -51,7 +51,7 @@ namespace Demo.TenantMonitor
                     //it's not already set.
                     if (item.ttl != -1)
                     {
-                        return;
+                        continue;
                     }
 
                     //Set the ttl to 60 seconds.
