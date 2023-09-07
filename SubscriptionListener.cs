@@ -20,11 +20,12 @@ namespace Demo.TenantMonitor
         {
             //Get the logger.
             _logger = loggerFactory.CreateLogger<SubscriptionListener>();
+
+            _logger.LogInformation("SubscriptionListener constructor called");
             _configuration = configuration;
 
             //Get a handle to the cosmos container we want to write records into.
-            CosmosClient cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosConnection"));
-            _cosmosContainer = cosmosClient.GetContainer(Environment.GetEnvironmentVariable("CosmosDatabase"),Environment.GetEnvironmentVariable("CosmosContainer"));
+            _cosmosContainer = CosmosHelper.GetContainer(Environment.GetEnvironmentVariable("CosmosDatabase"),Environment.GetEnvironmentVariable("CosmosContainer"));
         }
 
         /**
