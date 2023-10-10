@@ -104,10 +104,11 @@ To test an Event Grid Message, you must use the following configuration in your 
 If you decide to use this in a production scenario, consider making the following changes.  This list is not exhaustive, and you should make whatever changes are relevant to your environment.
 
 1. Add error handling and more robust logging to the functions.
-2. Add filtering to the event grid subscription to minimize the events that trigger the functions.
-3. Add filtering to the SubscriptionListener function to minimize the events that are stored in Cosmos DB.
-4. Update the functions to use a Managed Identity to access Cosmos DB or move the Cosmos connection string to a Key Vault.
-5. Create remediation functions that the EventHandler triggers.
-6. Add an http api that allows long running remediations to update the document logs which in turn will trigger the EventHandler.
-7. Build out a proper CICD pipeline for all of this.
-8. Add a timer function that will look for documents that have not been updated in X time period and trigger an alert.
+1. Add filtering to the event grid subscription to minimize the events that trigger the functions.
+1. Add filtering to the SubscriptionListener function to minimize the events that are stored in Cosmos DB.
+1. Update the functions to use a Managed Identity to access Cosmos DB or move the Cosmos connection string to a Key Vault.
+1. Create remediation functions that the EventHandler triggers.
+1. Add an http api that allows long running remediations to update the document logs which in turn will trigger the EventHandler.
+1. Build out a proper CICD pipeline for all of this.
+1. Add a timer function that will look for documents that have not been updated in X time period and trigger an alert.
+1. You may notice that only a single instance of the EventHandler function gets started.  This is because a single instance of a function binds to a physical partition in Cosmos DB.  If you need to be able to process concurrently to keep up, consider scaling up the ru's in Cosmos in intervals of 10,000 ru's as this will force a physcial partition split.  After the split occurs, you can scale back down to a managable and cost effective amount. 
