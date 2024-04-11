@@ -19,16 +19,24 @@ namespace Demo.TenantMonitor
             _logger.LogInformation("EventHandler constructor called");
 
             //Get a handle to the cosmos container we want to write records into.
-            _cosmosContainer = CosmosHelper.GetContainer(Environment.GetEnvironmentVariable("CosmosDatabase"),Environment.GetEnvironmentVariable("CosmosContainer"));
+            string databaseName = Environment.GetEnvironmentVariable("CosmosDatabase");
+            string containerName = Environment.GetEnvironmentVariable("CosmosContainer");
+
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(containerName))
+            {
+                throw new ArgumentException("CosmosDatabase or CosmosContainer environment variables are not set.");
+            }
+
+            _cosmosContainer = CosmosHelper.GetContainer(databaseName, containerName);
         }
 
         [Function("EventHandler")]
         public async Task Run([CosmosDBTrigger(
             databaseName: "TenantMonitoring",
-            collectionName: "EventLog",
-            ConnectionStringSetting = "CosmosConnection",
-            LeaseCollectionName = "leases",
-            CreateLeaseCollectionIfNotExists = true)] IReadOnlyList<Object> eventItems)
+            containerName: "EventLog",
+            Connection = "CosmosConnection",
+            LeaseContainerName = "leases",
+            CreateLeaseContainerIfNotExists = true)] IReadOnlyList<Object> eventItems)
         {
             if (eventItems == null || eventItems.Count == 0)
             {

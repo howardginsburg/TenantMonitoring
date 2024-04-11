@@ -16,7 +16,7 @@ public class Program
                                 refreshOptions.Register("Reload", refreshAll: true));
                 });
             })
-            .ConfigureFunctionsWorkerDefaults()
+            .ConfigureFunctionsWebApplication()
             .Build();
 
         host.Run();

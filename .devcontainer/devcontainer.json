@@ -25,7 +25,10 @@
 				"ms-azuretools.vscode-azureresourcegroups",
 				"ms-vscode.vscode-node-azure-pack",
 				"ms-dotnettools.csdevkit",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"ms-vscode.azure-account",
+				"ms-azuretools.vscode-cosmosdb",
+				"ms-azuretools.vscode-azurestorage"
 			]
 		}
 	},
