@@ -2,7 +2,7 @@
 rand=$((100 + $RANDOM % 1000))
 
 #Variables for resources.
-location="eastus"
+location="westus2"
 resourceGroupName="TenantMonitor$rand"
 logAnalyticsWorkspace="TenantMonitorWorkspace$rand"
 functionAppInsights="TenantMonitorWorkspace$rand"
@@ -65,9 +65,9 @@ az appconfig kv set -n $appconfigName --key microsoft.sql.servers.write --conten
 appconfigConnectionString=$(az appconfig credential list -g $resourceGroupName -n $appconfigName --query "[0].connectionString" -o tsv)
 
 
-# Create the function app, set the linux function version to 7.0 since our functions are written for .Net 7, and set the config values.
-az functionapp create --consumption-plan-location $location --name $functionAppName --os-type Linux --resource-group $resourceGroupName --runtime dotnet-isolated --runtime-version 7 --storage-account $functionStorageAccountName --app-insights $functionAppInsights --functions-version 4
-az functionapp config set --name $functionAppName --resource-group $resourceGroupName --linux-fx-version "DOTNET-ISOLATED|7.0"
+# Create the function app, set the linux function version to 8.0 since our functions are written for .Net 8, and set the config values.
+az functionapp create --consumption-plan-location $location --name $functionAppName --os-type Linux --resource-group $resourceGroupName --runtime dotnet-isolated --runtime-version 8 --storage-account $functionStorageAccountName --app-insights $functionAppInsights --functions-version 4
+az functionapp config set --name $functionAppName --resource-group $resourceGroupName --linux-fx-version "DOTNET-ISOLATED|8.0"
 az functionapp config appsettings set --name $functionAppName --resource-group $resourceGroupName --settings "CosmosConnection=$cosmosConnectionString" "CosmosDatabase=$cosmosDatabaseName" "CosmosContainer=$cosmosCollection" "Configuration=$appconfigConnectionString"
 
 wget https://raw.githubusercontent.com/howardginsburg/TenantMonitoring/master/tenantmonitoringfunctions.zip
