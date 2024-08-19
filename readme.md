@@ -26,7 +26,7 @@ The deployment script will create the following assets in Azure:
   - Two storage accounts are created.  One is used by the Azure Fuction.  The other has the hierarchical file system enabled and is required to create an Azure Synapse resource.  It is not used in this implementation.
 - Azure App Config
   - Stores job configuration data that the SubscriptionListener reads in.
-- Azure Function (C# .Net 7)
+- Azure Function (C# .Net 8)
   - SubscriptionListener - triggered by EventGrid
   - EventHandler - triggered by Cosmos DB changefeed
 - Azure Synapse Analytics
